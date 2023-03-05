@@ -1,0 +1,22 @@
+version: "3"
+services:
+  db:
+    image: "mcr.microsoft.com/mssql/server"
+    environment:
+      SA_PASSWORD: "Your_password123"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    volumes:
+      - mssql_data:/var/opt/mssql
+      - ./temp:/var/opt/mssql/tmp
+     
+  storage:
+    image: "mcr.microsoft.com/azure-storage/azurite"
+    ports:
+      - "10002:10002"
+      - "10001:10001"
+      - "10000:10000"
+
+volumes:
+  mssql_data:
