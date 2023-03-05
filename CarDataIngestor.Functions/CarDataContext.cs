@@ -19,7 +19,8 @@ namespace CarDataIngestor.Data
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Server=tcp:aevansobddata.database.windows.net,1433;Initial Catalog=cardata;Persist Security Info=False;User ID=obd-data-user;Password=e1b866e4-4f11-42d9-a640-ffa7c453c73c;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+                var connectionStringForMigration = "";
+                optionsBuilder.UseSqlServer(connectionStringForMigration);
             }
         }
 
