@@ -1,35 +1,39 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace CarDataIngestor
 {
-    public partial class Ingestor
+    public class SnapshotPayload
     {
-        public class SnapshotDto
-        {
-            [JsonPropertyName("DRIVE_ID")]
-            public Guid DriveId { get; set; }
+        [JsonPropertyName("DRIVE_ID")]
+        public Guid DriveId { get; set; }
 
-            [JsonPropertyName("SEQUENCE_NUMBER")]
-            public int SequenceNumber { get; set; }
+        [JsonPropertyName("SNAPSHOTS")]
+        public IEnumerable<SnapshotDto> Snapshots { get; set; }
+    }
 
-            [JsonPropertyName("COOLANT_TEMP")]
-            public double CoolantTemp { get; set; }
+    public class SnapshotDto
+    {
+        [JsonPropertyName("SEQUENCE_NUMBER")]
+        public int SequenceNumber { get; set; }
 
-            [JsonPropertyName("ENGINE_LOAD")]
-            public double EngineLoad { get; set; }
+        [JsonPropertyName("COOLANT_TEMP")]
+        public double CoolantTemp { get; set; }
 
-            [JsonPropertyName("RPM")]
-            public double RPM { get; set; }
+        [JsonPropertyName("ENGINE_LOAD")]
+        public double EngineLoad { get; set; }
 
-            [JsonPropertyName("SPEED")]
-            public double Speed { get; set; }
+        [JsonPropertyName("RPM")]
+        public double RPM { get; set; }
 
-            [JsonPropertyName("INTAKE_TEMP")]
-            public double IntakeTemperature { get; set; }
+        [JsonPropertyName("SPEED")]
+        public double Speed { get; set; }
 
-            [JsonPropertyName("FUEL_LEVEL")]
-            public double FuelLevel { get; set; }
-        }
+        [JsonPropertyName("INTAKE_TEMP")]
+        public double IntakeTemperature { get; set; }
+
+        [JsonPropertyName("FUEL_LEVEL")]
+        public double FuelLevel { get; set; }
     }
 }
