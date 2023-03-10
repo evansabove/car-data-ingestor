@@ -1,54 +1,54 @@
 using CarDataIngestor.Data;
 using CarDataIngestor.Data.Entities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace CarDataIngestor
 {
-    public partial class Ingestor
+    public class IngestorFunctions
     {
         private readonly CarDataContext database;
+        private readonly ILogger<IngestorFunctions> logger;
 
-        public Ingestor(CarDataContext database)
+        public IngestorFunctions(CarDataContext database, ILogger<IngestorFunctions> logger)
         {
             this.database = database;
+            this.logger = logger;
         }
 
-        [FunctionName("Ingestor")]
-        public async Task Run([QueueTrigger("car-data-ingestor", Connection = "QueueConnectionString")]string queueItem, ILogger log)
+        [FunctionName("Ingestor-Http")]
+        [return: Queue("car-data-ingestor")]
+        public async Task<string> RunHttp([HttpTrigger(AuthorizationLevel.Function, "post", Route = "snapshot")] HttpRequest req)
         {
-            //var test = new SnapshotPayload
-            //{
-            //    DriveId = Guid.NewGuid(),
-            //    Snapshots = new List<SnapshotDto>
-            //    {
-            //        new SnapshotDto
-            //        {
-            //            CoolantTemp = 52,
-            //            EngineLoad = 48,
-            //            FuelLevel = 99,
-            //            IntakeTemperature = 12,
-            //            RPM = 1834,
-            //            SequenceNumber = 1,
-            //            Speed = 48
+            using StreamReader reader = new(req.Body);
+            return await reader.ReadToEndAsync();
+        }
 
-            //        }
-            //    }
-            //};
-
-            //var testString = JsonSerializer.Serialize(test);
-
-            var payload = JsonSerializer.Deserialize<SnapshotPayload>(queueItem);
+        [FunctionName("Ingestor-Queue")]
+        public async Task RunQueue([QueueTrigger("car-data-ingestor", Connection = "QueueConnectionString")]string queueItem)
+        {
+            SnapshotPayload payload = default;
+            try
+            {
+                payload = JsonSerializer.Deserialize<SnapshotPayload>(queueItem);
+            } catch(Exception e)
+            {
+                logger.LogError(e, e.Message);
+                return;
+            }
 
             if(payload.DriveId == default)
             {
-                log.LogInformation($"Drive ID not supplied.");
+                logger.LogInformation($"Drive ID not supplied.");
                 return;
             }
 
