@@ -56,7 +56,11 @@ namespace CarDataIngestor
 
             if(drive == default)
             {
-                drive = new Drive();
+                drive = new Drive 
+                { 
+                    Id = payload.DriveId 
+                };
+
                 database.Drives.Add(drive);
             }
 
