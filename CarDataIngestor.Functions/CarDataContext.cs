@@ -1,6 +1,5 @@
 ﻿using CarDataIngestor.Data.Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 namespace CarDataIngestor.Data
 {

@@ -12,14 +12,14 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace CarDataIngestor
+namespace CarDataIngestor.Functions
 {
-    public class IngestorFunctions
+    public class IngestorFunction
     {
         private readonly CarDataContext database;
-        private readonly ILogger<IngestorFunctions> logger;
+        private readonly ILogger<IngestorFunction> logger;
 
-        public IngestorFunctions(CarDataContext database, ILogger<IngestorFunctions> logger)
+        public IngestorFunction(CarDataContext database, ILogger<IngestorFunction> logger)
         {
             this.database = database;
             this.logger = logger;
@@ -34,19 +34,20 @@ namespace CarDataIngestor
         }
 
         [FunctionName("Ingestor-Queue")]
-        public async Task RunQueue([QueueTrigger("car-data-ingestor", Connection = "QueueConnectionString")]string queueItem)
+        public async Task RunQueue([QueueTrigger("car-data-ingestor", Connection = "QueueConnectionString")] string queueItem)
         {
             SnapshotPayload payload = default;
             try
             {
                 payload = JsonSerializer.Deserialize<SnapshotPayload>(queueItem);
-            } catch(Exception e)
+            }
+            catch (Exception e)
             {
                 logger.LogError(e, e.Message);
                 return;
             }
 
-            if(payload.DriveId == default)
+            if (payload.DriveId == default)
             {
                 logger.LogInformation($"Drive ID not supplied.");
                 return;
@@ -54,11 +55,11 @@ namespace CarDataIngestor
 
             var drive = await database.Drives.SingleOrDefaultAsync(x => x.Id == payload.DriveId);
 
-            if(drive == default)
+            if (drive == default)
             {
-                drive = new Drive 
-                { 
-                    Id = payload.DriveId 
+                drive = new Drive
+                {
+                    Id = payload.DriveId
                 };
 
                 database.Drives.Add(drive);
@@ -78,7 +79,7 @@ namespace CarDataIngestor
                 };
             });
 
-            foreach(var snapshot in snapshots)
+            foreach (var snapshot in snapshots)
             {
                 drive.Snapshots.Add(snapshot);
             }

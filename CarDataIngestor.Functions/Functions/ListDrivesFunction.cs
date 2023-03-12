@@ -1,27 +1,23 @@
-using CarDataIngestor.Data;
-using CarDataIngestor.Data.Entities;
+﻿using CarDataIngestor.Data;
 using CarDataIngestor.Response;
 using CarDataIngestor.Utilities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
-using System.IO;
+using System;
 using System.Linq;
-using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace CarDataIngestor
+namespace CarDataIngestor.Functions
 {
-    public class APIFunctions
+    public class ListDrivesFunction
     {
         private readonly CarDataContext database;
-        private readonly ILogger<APIFunctions> logger;
+        private readonly ILogger<ListDrivesFunction> logger;
 
-        public APIFunctions(CarDataContext database, ILogger<APIFunctions> logger)
+        public ListDrivesFunction(CarDataContext database, ILogger<ListDrivesFunction> logger)
         {
             this.database = database;
             this.logger = logger;
@@ -51,10 +47,10 @@ namespace CarDataIngestor
             var responses = drives
                 .ToList()
                 .Select(x => new DriveResponse
-            {
-                Id = x.Id,
-                GetUri = UriBuilder.BuildFunctionUri($"drives/{x.Id}")
-            });
+                {
+                    Id = x.Id,
+                    GetUri = ApiUriBuilder.BuildFunctionUri($"drives/{x.Id}")
+                });
 
             return new OkObjectResult(responses);
         }

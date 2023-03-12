@@ -2,7 +2,7 @@
 
 namespace CarDataIngestor.Utilities
 {
-    internal static class UriBuilder
+    internal static class ApiUriBuilder
     {
         public static Uri BuildFunctionUri(string path)
         {
