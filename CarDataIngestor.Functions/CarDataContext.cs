@@ -18,7 +18,7 @@ namespace CarDataIngestor.Data
         {
             if (!optionsBuilder.IsConfigured)
             {
-                var connectionStringForMigration = "";
+                var connectionStringForMigration = "Server=tcp:127.0.0.1,1433;Initial Catalog=CarData;Persist Security Info=False;User Id=sa;Password=Your_password123;Connection Timeout=30";
                 optionsBuilder.UseSqlServer(connectionStringForMigration);
             }
         }

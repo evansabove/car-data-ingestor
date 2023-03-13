@@ -59,7 +59,8 @@ namespace CarDataIngestor.Functions
             {
                 drive = new Drive
                 {
-                    Id = payload.DriveId
+                    Id = payload.DriveId,
+                    IngestedDate = DateTime.UtcNow
                 };
 
                 database.Drives.Add(drive);

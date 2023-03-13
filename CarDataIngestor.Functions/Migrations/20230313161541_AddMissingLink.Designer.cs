@@ -4,6 +4,7 @@ using CarDataIngestor.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarDataIngestor.Migrations
 {
     [DbContext(typeof(CarDataContext))]
-    partial class CarDataContextModelSnapshot : ModelSnapshot
+    [Migration("20230313161541_AddMissingLink")]
+    partial class AddMissingLink
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -27,9 +29,6 @@ namespace CarDataIngestor.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("IngestedDate")
-                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
