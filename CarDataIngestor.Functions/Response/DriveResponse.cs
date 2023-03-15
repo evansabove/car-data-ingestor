@@ -6,5 +6,6 @@ namespace CarDataIngestor.Response
     {
         public Guid Id { get; set; }
         public Uri GetUri { get; set; }
+        public DateTime IngestedDate { get; set; }
     }
 }

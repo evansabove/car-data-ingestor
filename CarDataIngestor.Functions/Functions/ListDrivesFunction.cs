@@ -49,7 +49,8 @@ namespace CarDataIngestor.Functions
                 .Select(x => new DriveResponse
                 {
                     Id = x.Id,
-                    GetUri = ApiUriBuilder.BuildFunctionUri(req, $"drives/{x.Id}")
+                    GetUri = ApiUriBuilder.BuildFunctionUri(req, $"drives/{x.Id}"),
+                    IngestedDate = x.IngestedDate
                 });
 
             return new OkObjectResult(responses);
